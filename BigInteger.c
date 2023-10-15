@@ -169,7 +169,7 @@ extern void subBigInt(BigInt *x, const BigInt *y) {
 	}
 }
 
-void modBigInt(BigInt *x, const BigInt *y) {
+extern void modBigInt(BigInt *x, const BigInt *y) {
 	for (size_t i = 0; i < x->chunks; i++) {
 		x->digit[i] = x->digit[i] % y->digit[i];
 	}
