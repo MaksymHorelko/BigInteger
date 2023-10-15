@@ -1,0 +1,1 @@
+gcc -Wall -g -o test.exe test.o BigInteger.o
