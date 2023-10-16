@@ -42,8 +42,7 @@ extern void printBigInt(BigInt *x);
 static char** __splitHex(const char *input, size_t length, size_t chunks) {
 	char **subStrings = (char**) malloc(chunks * sizeof(char*));
 	if (subStrings == NULL) {
-		fprintf(stderr, "Memory allocation failed\n");
-		exit(-1);
+		return NULL;
 	}
 	for (int i = 0; i < chunks; i++) {
 		int startIndex = length - (i + 1) * BUFFSIZE;
