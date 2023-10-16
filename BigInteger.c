@@ -24,6 +24,12 @@ extern BigInt* setHex(const char *hex) {
 	bigint->chunks = size;
 
 	char **splitedHex = __splitHex(hex, hexSize, size);
+	if(splitedHex == NULL) {
+		fprintf(stderr, "Memory allocation failed\n");
+		free(bigint->digit);
+		free(bigint);
+		return NULL;
+	}
 
 	for (size_t i = 0; i < size; i++) {
 		char *endptr;
