@@ -39,6 +39,7 @@ extern BigInt* setHex(const char *hex) {
 
 extern void freeBigInt(BigInt *x) {
 	free(x->digit);
+	free(x);
 }
 
 extern char* getHex(BigInt *x) {
