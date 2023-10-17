@@ -8,7 +8,7 @@ extern BigInt* setHex(const char *hex) {
 	}
 	size_t size = (hexSize + BUFFSIZE - 1) / BUFFSIZE;
 
-	BigInt *bigint = (BigInt*) malloc(size * sizeof(BigInt));
+	BigInt *bigint = (BigInt*) malloc(sizeof(BigInt));
 	if (bigint == NULL) {
 		fprintf(stderr, "Memory allocation failed\n");
 		return NULL;
