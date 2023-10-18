@@ -1,6 +1,6 @@
 #include "BigInteger.h"
 
-extern BigInt* setHex(const char *hex) {
+BigInt* setHex(const char *hex) {
 	size_t hexSize = strlen(hex);
 	if (hexSize == 0) {
 		fprintf(stderr, "Invalid input Hex\n");
@@ -35,12 +35,12 @@ extern BigInt* setHex(const char *hex) {
 	return bigint;
 }
 
-extern void freeBigInt(BigInt *x) {
+void freeBigInt(BigInt *x) {
 	free(x->digit);
 	free(x);
 }
 
-extern char* getHex(BigInt *x) {
+char* getHex(BigInt *x) {
 	if (x == NULL || x->digit == NULL) {
 		fprintf(stderr, "Invalid BigInt structure or buffers.\n");
 		return NULL;
@@ -72,17 +72,17 @@ extern char* getHex(BigInt *x) {
 	return result;
 }
 
-extern void printBigInt(BigInt *x) {
+void printBigInt(BigInt *x) {
 	printf("%s\n", getHex(x));
 }
 
-extern void invBigInt(BigInt *x) {
+void invBigInt(BigInt *x) {
 	for (size_t i = 0; i < x->chunks; i++) {
 		x->digit[i] = ~x->digit[i];
 	}
 }
 
-extern void xorBigInt(BigInt *x, const BigInt *y) {
+void xorBigInt(BigInt *x, const BigInt *y) {
 	if (x->chunks != y->chunks) {
 		fprintf(stderr, "XOR size mismatch\n");
 		return;
@@ -92,7 +92,7 @@ extern void xorBigInt(BigInt *x, const BigInt *y) {
 	}
 }
 
-extern void orBigInt(BigInt *x, const BigInt *y) {
+void orBigInt(BigInt *x, const BigInt *y) {
 	if (x->chunks != y->chunks) {
 		fprintf(stderr, "OR size mismatch\n");
 		return;
@@ -102,7 +102,7 @@ extern void orBigInt(BigInt *x, const BigInt *y) {
 	}
 }
 
-extern void andBigInt(BigInt *x, const BigInt *y) {
+void andBigInt(BigInt *x, const BigInt *y) {
 	if (x->chunks != y->chunks) {
 		fprintf(stderr, "AND size mismatch\n");
 		return;
@@ -112,7 +112,7 @@ extern void andBigInt(BigInt *x, const BigInt *y) {
 	}
 }
 
-extern void shiftR_BigInt(BigInt *bigint, const int bits) {
+ void shiftR_BigInt(BigInt *bigint, const int bits) {
 	for (size_t i = 0; i < bigint->chunks; i++) {
 		bigint->digit[i] >>= bits;
 	}
@@ -149,7 +149,7 @@ extern void addBigInt(BigInt *x, const BigInt *y) {
 	}
 }
 
-extern void subBigInt(BigInt *x, const BigInt *y) {
+void subBigInt(BigInt *x, const BigInt *y) {
 	if (y->chunks > x->chunks
 			|| (y->digit[0] > x->digit[0] && x->chunks == y->chunks)) {
 		fprintf(stderr, "The second digit is bigger than the first\n");
@@ -168,7 +168,7 @@ extern void subBigInt(BigInt *x, const BigInt *y) {
 	}
 }
 
-extern void modBigInt(BigInt *x, const BigInt *y) {
+void modBigInt(BigInt *x, const BigInt *y) {
 	for (size_t i = 0; i < x->chunks; i++) {
 		x->digit[i] = x->digit[i] % y->digit[i];
 	}
