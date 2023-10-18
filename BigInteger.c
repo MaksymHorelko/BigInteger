@@ -118,13 +118,13 @@ void andBigInt(BigInt *x, const BigInt *y) {
 	}
 }
 
-extern void shiftL_BigInt(BigInt *bigint, const int bits) {
+void shiftL_BigInt(BigInt *bigint, const int bits) {
 	for (size_t i = 0; i < bigint->chunks; i++) {
 		bigint->digit[i] <<= bits;
 	}
 }
 
-extern void addBigInt(BigInt *x, const BigInt *y) {
+void addBigInt(BigInt *x, const BigInt *y) {
 	uint64_t carry = 0;
 	for (size_t i = 0; i < x->chunks; i++) {
 		uint64_t sum = x->digit[i] + y->digit[i] + carry;
