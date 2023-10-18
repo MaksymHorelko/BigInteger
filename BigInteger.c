@@ -2,7 +2,7 @@
 
 BigInt* setHex(const char *hex) {
 	size_t hexSize = strlen(hex);
-	if (hexSize == 0) {
+	if (hexSize == 0 || strncmp(hex, "0x", 2) == 0) {
 		fprintf(stderr, "Invalid input Hex\n");
 		return NULL;
 	}
