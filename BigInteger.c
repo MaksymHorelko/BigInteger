@@ -6,28 +6,20 @@ BigInt* setHex(const char *hex) {
 		fprintf(stderr, "Invalid input Hex\n");
 		return NULL;
 	}
+	for (size_t i = 0; i < hexSize; i++) {
+		if (!isxdigit(hex[i])) {
+			fprintf(stderr, "Invalid input Hex\n");
+			return NULL;
+		}
+	}
+
 	size_t size = (hexSize + BUFFSIZE - 1) / BUFFSIZE;
-
-	BigInt *bigint = (BigInt*) malloc(sizeof(BigInt));
-	if (bigint == NULL) {
-		fprintf(stderr, "Memory allocation failed\n");
-		return NULL;
-	}
-
-	bigint->digit = (uint64_t*) malloc(size * sizeof(uint64_t));
-	if (bigint->digit == NULL) {
-		fprintf(stderr, "Memory allocation failed\n");
-		free(bigint);
-		return NULL;
-	}
-
-	bigint->chunks = size;
+	BigInt *bigint = __createBigInt(size);
 
 	char **splitedHex = __splitHex(hex, hexSize, size);
-	if(splitedHex == NULL) {
+	if (splitedHex == NULL) {
 		fprintf(stderr, "Memory allocation failed\n");
-		free(bigint->digit);
-		free(bigint);
+		freeBigInt(bigint);
 		return NULL;
 	}
 	__strToHex(bigint, splitedHex, size);
@@ -42,7 +34,7 @@ void freeBigInt(BigInt *x) {
 
 char* getHex(const BigInt *x) {
 	if (x == NULL || x->digit == NULL) {
-		fprintf(stderr, "Invalid BigInt structure or buffers.\n");
+		fprintf(stderr, "Invalid BigInt structure or buffer.\n");
 		return NULL;
 	}
 
@@ -73,26 +65,55 @@ char* getHex(const BigInt *x) {
 }
 
 void printBigInt(const BigInt *x) {
+	if (x == NULL) {
+		fprintf(stderr, "Invalid BigInt structure.\n");
+		return;
+	}
 	printf("%s\n", getHex(x));
 }
 
 void invBigInt(BigInt *x) {
+	if (x == NULL) {
+		fprintf(stderr, "Invalid BigInt structure.\n");
+		return;
+	}
 	for (size_t i = 0; i < x->chunks; i++) {
 		x->digit[i] = ~x->digit[i];
 	}
 }
 
 void xorBigInt(BigInt *x, const BigInt *y) {
+	if (x == NULL || y == NULL) {
+		if (x == NULL || x->digit == NULL) {
+			char *strERROR =
+					(x == NULL) ?
+							"Invalid BigInt 'x' structure.\n" :
+							"Invalid BigInt 'y' structure.\n";
+			fprintf(stderr, strERROR);
+			return;
+		}
+	}
 	if (x->chunks != y->chunks) {
 		fprintf(stderr, "XOR size mismatch\n");
 		return;
 	}
+
 	for (size_t i = 0; i < x->chunks; i++) {
 		x->digit[i] ^= y->digit[i];
 	}
 }
 
 void orBigInt(BigInt *x, const BigInt *y) {
+	if (x == NULL || y == NULL) {
+		if (x == NULL || x->digit == NULL) {
+			char *strERROR =
+					(x == NULL) ?
+							"Invalid BigInt 'x' structure.\n" :
+							"Invalid BigInt 'y' structure.\n";
+			fprintf(stderr, strERROR);
+			return;
+		}
+	}
 	if (x->chunks != y->chunks) {
 		fprintf(stderr, "OR size mismatch\n");
 		return;
@@ -103,6 +124,16 @@ void orBigInt(BigInt *x, const BigInt *y) {
 }
 
 void andBigInt(BigInt *x, const BigInt *y) {
+	if (x == NULL || y == NULL) {
+		if (x == NULL || x->digit == NULL) {
+			char *strERROR =
+					(x == NULL) ?
+							"Invalid BigInt 'x' structure.\n" :
+							"Invalid BigInt 'y' structure.\n";
+			fprintf(stderr, strERROR);
+			return;
+		}
+	}
 	if (x->chunks != y->chunks) {
 		fprintf(stderr, "AND size mismatch\n");
 		return;
@@ -112,19 +143,48 @@ void andBigInt(BigInt *x, const BigInt *y) {
 	}
 }
 
- void shiftR_BigInt(BigInt *bigint, const int bits) {
-	for (size_t i = 0; i < bigint->chunks; i++) {
-		bigint->digit[i] >>= bits;
+void shiftR_BigInt(BigInt *x, const unsigned int bits) {
+	if (x == NULL) {
+		fprintf(stderr, "Invalid BigInt structure.\n");
+		return;
+	}
+	if (bits == 0) {
+		fprintf(stderr, "Invalid number of bits.\n");
+		return;
+	}
+
+	for (size_t i = 0; i < x->chunks; i++) {
+		x->digit[i] >>= bits;
 	}
 }
 
-void shiftL_BigInt(BigInt *bigint, const int bits) {
-	for (size_t i = 0; i < bigint->chunks; i++) {
-		bigint->digit[i] <<= bits;
+void shiftL_BigInt(BigInt *x, const unsigned int bits) {
+	if (x == NULL) {
+		char *strERROR = "Invalid BigInt structure.\n";
+		fprintf(stderr, strERROR);
+		return;
+	}
+	if (bits == 0) {
+		fprintf(stderr, "Invalid number of bits.\n");
+		return;
+	}
+
+	for (size_t i = 0; i < x->chunks; i++) {
+		x->digit[i] <<= bits;
 	}
 }
 
 void addBigInt(BigInt *x, const BigInt *y) {
+	if (x == NULL || y == NULL) {
+		if (x == NULL || x->digit == NULL) {
+			char *strERROR =
+					(x == NULL) ?
+							"Invalid BigInt 'x' structure.\n" :
+							"Invalid BigInt 'y' structure.\n";
+			fprintf(stderr, strERROR);
+			return;
+		}
+	}
 	uint64_t carry = 0;
 	for (size_t i = 0; i < x->chunks; i++) {
 		uint64_t sum = x->digit[i] + y->digit[i] + carry;
@@ -150,6 +210,16 @@ void addBigInt(BigInt *x, const BigInt *y) {
 }
 
 void subBigInt(BigInt *x, const BigInt *y) {
+	if (x == NULL || y == NULL) {
+		if (x == NULL || x->digit == NULL) {
+			char *strERROR =
+					(x == NULL) ?
+							"Invalid BigInt 'x' structure.\n" :
+							"Invalid BigInt 'y' structure.\n";
+			fprintf(stderr, strERROR);
+			return;
+		}
+	}
 	if (y->chunks > x->chunks
 			|| (y->digit[0] > x->digit[0] && x->chunks == y->chunks)) {
 		fprintf(stderr, "The second digit is bigger than the first\n");
@@ -169,6 +239,16 @@ void subBigInt(BigInt *x, const BigInt *y) {
 }
 
 void modBigInt(BigInt *x, const BigInt *y) {
+	if (x == NULL || y == NULL) {
+		if (x == NULL || x->digit == NULL) {
+			char *strERROR =
+					(x == NULL) ?
+							"Invalid BigInt 'x' structure.\n" :
+							"Invalid BigInt 'y' structure.\n";
+			fprintf(stderr, strERROR);
+			return;
+		}
+	}
 	for (size_t i = 0; i < x->chunks; i++) {
 		x->digit[i] = x->digit[i] % y->digit[i];
 	}
