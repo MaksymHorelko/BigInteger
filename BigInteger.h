@@ -19,7 +19,7 @@ typedef struct {
 extern BigInt* setHex(const char *hex);
 
 /* Getter functions */
-extern char* getHex(BigInt *x);
+extern char* getHex(const BigInt *x);
 
 /* Free function */
 extern void freeBigInt(BigInt *x);
@@ -29,6 +29,7 @@ extern void invBigInt(BigInt *x);
 extern void xorBigInt(BigInt *x, const BigInt *y);
 extern void orBigInt(BigInt *x, const BigInt *y);
 extern void andBigInt(BigInt *x, const BigInt *y);
+
 extern void shiftR_BigInt(BigInt *x, const int bits);
 extern void shiftL_BigInt(BigInt *x, const int bits);
 
@@ -37,6 +38,7 @@ extern void subBigInt(BigInt *x, const BigInt *y);
 extern void modBigInt(BigInt *x, const BigInt *y);
 
 //extern void mulBigInt(BigInt *x, const BigInt *y);
+//extern void divBigInt(BigInt* x, const BigInt *y);
 
 /* Other functions*/
 extern void printBigInt(const BigInt *x);
