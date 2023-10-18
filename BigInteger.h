@@ -36,6 +36,8 @@ extern void addBigInt(BigInt *x, const BigInt *y);
 extern void subBigInt(BigInt *x, const BigInt *y);
 extern void modBigInt(BigInt *x, const BigInt *y);
 
+//extern void mulBigInt(BigInt *x, const BigInt *y);
+
 /* Other functions*/
 extern void printBigInt(BigInt *x);
 
@@ -57,6 +59,25 @@ static char** __splitHex(const char *input, size_t length, size_t chunks) {
 		subStrings[i][BUFFSIZE + 2] = '\0';
 	}
 	return subStrings;
+}
+
+static void __strToHex(BigInt *x, char **hex, size_t size) {
+	for (size_t i = 0; i < size; i++) {
+		char *endptr;
+		x->digit[i] = strtoull(hex[i], &endptr, BUFFSIZE);
+		if (*endptr != '\0') {
+			fprintf(stderr, "Conversion failed for string: %s\n", hex[i]);
+			freeBigInt(x);
+			return;
+		}
+	}
+}
+
+static BigInt* __createBigInt(size_t chunks) {
+    BigInt* bigInt = (BigInt*)malloc(sizeof(BigInt));
+    bigInt->digit = (uint64_t*)calloc(chunks, sizeof(uint64_t));
+    bigInt->chunks = chunks;
+    return bigInt;
 }
 
 #endif
