@@ -39,7 +39,7 @@ extern void modBigInt(BigInt *x, const BigInt *y);
 //extern void mulBigInt(BigInt *x, const BigInt *y);
 
 /* Other functions*/
-extern void printBigInt(BigInt *x);
+extern void printBigInt(const BigInt *x);
 
 static char** __splitHex(const char *input, size_t length, size_t chunks) {
 	char **subStrings = (char**) malloc(chunks * sizeof(char*));
