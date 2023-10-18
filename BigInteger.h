@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <inttypes.h>
+#include <ctype.h>
 
 #define BUFFSIZE 16
 
@@ -30,8 +31,8 @@ extern void xorBigInt(BigInt *x, const BigInt *y);
 extern void orBigInt(BigInt *x, const BigInt *y);
 extern void andBigInt(BigInt *x, const BigInt *y);
 
-extern void shiftR_BigInt(BigInt *x, const int bits);
-extern void shiftL_BigInt(BigInt *x, const int bits);
+extern void shiftR_BigInt(BigInt *x, const unsigned int bits);
+extern void shiftL_BigInt(BigInt *x, const unsigned int bits);
 
 extern void addBigInt(BigInt *x, const BigInt *y);
 extern void subBigInt(BigInt *x, const BigInt *y);
@@ -76,10 +77,44 @@ static void __strToHex(BigInt *x, char **hex, size_t size) {
 }
 
 static BigInt* __createBigInt(size_t chunks) {
-    BigInt* bigInt = (BigInt*)malloc(sizeof(BigInt));
-    bigInt->digit = (uint64_t*)calloc(chunks, sizeof(uint64_t));
-    bigInt->chunks = chunks;
-    return bigInt;
+    BigInt* bigint = (BigInt*)malloc(sizeof(BigInt));
+	if (bigint == NULL) {
+		fprintf(stderr, "Memory allocation failed\n");
+		return NULL;
+	}
+
+	bigint->digit = (uint64_t*)calloc(chunks, sizeof(uint64_t));
+	if (bigint->digit == NULL) {
+		fprintf(stderr, "Memory allocation failed\n");
+		free(bigint);
+		return NULL;
+	}
+
+	bigint->chunks = chunks;
+
+    return bigint;
+}
+
+static void __copyFromTo(const BigInt* from, BigInt* to, unsigned int start, unsigned int end) {
+	if(start > end || end > from->chunks) {
+		fprintf(stderr, "Invalid indexes\n");
+		return;
+	}
+	if(from == NULL || to == NULL) {
+		char *strERROR =
+				(from == NULL) ?
+						"Invalid BigInt 'from' structure.\n" : "Invalid BigInt 'to' structure.\n";
+		fprintf(stderr, strERROR);
+		return;
+	}
+	free(to->digit);
+	to->chunks = end - start;
+	to->digit = (uint64_t*)malloc(to->chunks * sizeof(uint64_t));
+	int k = 0;
+	for(size_t i = end; i > start; i--) {
+		to->digit[k] = from->digit[i];
+		k++;
+	}
 }
 
 #endif
