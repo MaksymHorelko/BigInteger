@@ -30,7 +30,7 @@ BigInt* setHex(const char *hex) {
 		free(bigint);
 		return NULL;
 	}
-	_strToHex(bigint, splitedHex, size);
+	__strToHex(bigint, splitedHex, size);
 
 	return bigint;
 }
