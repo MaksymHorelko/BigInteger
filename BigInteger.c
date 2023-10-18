@@ -72,7 +72,7 @@ char* getHex(BigInt *x) {
 	return result;
 }
 
-void printBigInt(BigInt *x) {
+void printBigInt(const BigInt *x) {
 	printf("%s\n", getHex(x));
 }
 
