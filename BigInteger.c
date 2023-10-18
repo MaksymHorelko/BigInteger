@@ -40,7 +40,7 @@ void freeBigInt(BigInt *x) {
 	free(x);
 }
 
-char* getHex(BigInt *x) {
+char* getHex(const BigInt *x) {
 	if (x == NULL || x->digit == NULL) {
 		fprintf(stderr, "Invalid BigInt structure or buffers.\n");
 		return NULL;
