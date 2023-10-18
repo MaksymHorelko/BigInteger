@@ -30,16 +30,8 @@ extern BigInt* setHex(const char *hex) {
 		free(bigint);
 		return NULL;
 	}
+	_strToHex(bigint, splitedHex, size);
 
-	for (size_t i = 0; i < size; i++) {
-		char *endptr;
-		bigint->digit[i] = strtoull(splitedHex[i], &endptr, 16);
-		if (*endptr != '\0') {
-			fprintf(stderr, "Conversion failed for string: %s\n", splitedHex[i]);
-			free(bigint->digit);
-			return NULL;
-		}
-	}
 	return bigint;
 }
 
