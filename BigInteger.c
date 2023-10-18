@@ -15,6 +15,7 @@ BigInt* setHex(const char *hex) {
 
 	size_t size = (hexSize + BUFFSIZE - 1) / BUFFSIZE;
 	BigInt *bigint = __createBigInt(size);
+	if(bigint == NULL) return NULL;
 
 	char **splitedHex = __splitHex(hex, hexSize, size);
 	if (splitedHex == NULL) {
